@@ -104,7 +104,7 @@ def base64_hmac(salt, value, key, algorithm="sha1"):
 
 
 def _cookie_signer_key(key):
-    # SECRET_KEYS items may be str or bytes.
+    """ SECRET_KEYS items may be str or bytes. """
     return b"django.http.cookies" + force_bytes(key)
 
 
@@ -177,10 +177,11 @@ def loads(
 
 
 class Signer:
-    # RemovedInDjango51Warning: When the deprecation ends, replace with:
-    # def __init__(
-    #   self, *, key=None, sep=":", salt=None, algorithm=None, fallback_keys=None
-    # ):
+   """ 
+   >>> RemovedInDjango51Warning: When the deprecation ends, replace with:
+   >>> def __init__(
+      self, *, key=None, sep=":", salt=None, algorithm=None, fallback_keys=None
+    ): """
     def __init__(
         self,
         *args,
@@ -252,7 +253,7 @@ class Signer:
         is_compressed = False
 
         if compress:
-            # Avoid zlib dependency unless compress is being used.
+            """ Avoid zlib dependency unless compress is being used. """
             compressed = zlib.compress(data)
             if len(compressed) < (len(data) - 1):
                 data = compressed
@@ -263,8 +264,10 @@ class Signer:
         return self.sign(base64d)
 
     def unsign_object(self, signed_obj, serializer=JSONSerializer, **kwargs):
-        # Signer.unsign() returns str but base64 and zlib compression operate
-        # on bytes.
+        """
+         Signer.unsign() returns str but base64 and zlib compression operate
+         on bytes.
+        """
         base64d = self.unsign(signed_obj, **kwargs).encode()
         decompress = base64d[:1] == b"."
         if decompress:
